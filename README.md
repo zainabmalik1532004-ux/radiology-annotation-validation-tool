@@ -52,9 +52,21 @@ pip install streamlit pydicom pandas Pillow numpy
 streamlit run app.py
 ```
 
-## Documentation
+## Annotation Guidelines Document
 
-Full annotation guidelines covering brainstem and cerebellum anatomy, imaging sequence rules, annotation definition refinement process, quality control criteria, and pre-handoff validation checklist.
+A full annotation guidelines document is included in this repository covering:
+
+- Brainstem and cerebellum anatomical overview with landmark definitions
+- Imaging sequence rules for MRI and CT (T1, T2, FLAIR, DWI and ADC, T1 with Gadolinium)
+- Annotation definition rules for every structure
+- Annotation review checklist with pass, fail, and flag criteria
+- Annotation definition refinement process
+- Common annotation errors and prevention
+- Pre-handoff validation checklist requiring Dice coefficient above 0.80 for inter-annotator agreement
+
+Download PDF: [Radiology_AI_Annotation_Project_Final.pdf](./Radiology_AI_Annotation_Project_Final.pdf)
+
+Download Word: [Radiology_AI_Annotation_Project_Final.docx](./Radiology_AI_Annotation_Project_Final.docx)
 
 ## Author
 
