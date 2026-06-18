@@ -4,3 +4,4 @@ pandas==3.0.3
 Pillow==12.2.0
 numpy==1.26.4
 pyarrow==14.0.1
+pytest
