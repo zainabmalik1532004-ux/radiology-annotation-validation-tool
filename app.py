@@ -3,6 +3,7 @@ from PIL import Image
 import pandas as pd
 import os
 from datetime import datetime
+from db import insert_annotation, fetch_annotations_df
 
 # Page setup
 st.set_page_config(page_title="Radiology Annotation Tool", layout="wide")
@@ -11,8 +12,6 @@ st.set_page_config(page_title="Radiology Annotation Tool", layout="wide")
 st.title("Radiology Image Annotation & Quality Validation Tool")
 st.markdown("Annotate medical images and validate dataset quality for AI model training.")
 
-# Create folders
-os.makedirs("annotations", exist_ok=True)
 
 # Sidebar
 st.sidebar.title("Navigation")
@@ -113,29 +112,18 @@ if page == "Upload & Annotate":
                 "notes": notes,
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
-            df_new = pd.DataFrame([annotation])
-            csv_path = "annotations/annotations.csv"
-            if os.path.exists(csv_path):
-                df_existing = pd.read_csv(csv_path)
-                df = pd.concat([df_existing, df_new], ignore_index=True)
-            else:
-                df = df_new
-            df.to_csv(csv_path, index=False)
+            insert_annotation(annotation)
             st.success("Annotation saved successfully!")
 
 elif page == "Validation Dashboard":
     st.header("Validation Dashboard")
 
-    csv_path = "annotations/annotations.csv"
-    if os.path.exists(csv_path):
-        df = pd.read_csv(csv_path)
+    # Filter by scan type
+    st.subheader("Filter by Scan Type")
+    filter_type = st.radio("Show", ["All", "Chest X-Ray", "Brainstem & Cerebellum"])
+    df = fetch_annotations_df(filter_type)
 
-        # Filter by scan type
-        st.subheader("Filter by Scan Type")
-        filter_type = st.radio("Show", ["All", "Chest X-Ray", "Brainstem & Cerebellum"])
-        if filter_type != "All":
-            df = df[df["scan_type"] == filter_type]
-
+    if not df.empty:
         st.subheader("All Annotations")
         st.table(df)
 

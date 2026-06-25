@@ -3,3 +3,4 @@ annotations/
 sample_images/
 __pycache__/
 *.pyc
+.env

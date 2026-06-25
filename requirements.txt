@@ -1,7 +1,9 @@
-streamlit==1.58.0
-pydicom==3.0.2
-pandas==3.0.3
-Pillow==12.2.0
-numpy==1.26.4
-pyarrow==14.0.1
+streamlit
+pydicom
+pandas
+Pillow
+numpy
+pyarrow
+pymongo
+python-dotenv
 pytest
