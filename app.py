@@ -3,7 +3,7 @@ from PIL import Image
 import pandas as pd
 import os
 from datetime import datetime
-from db import insert_annotation, fetch_annotations_df
+from db import insert_annotation, fetch_annotations_df, update_annotation_metadata
 
 # Page setup
 st.set_page_config(page_title="Radiology Annotation Tool", layout="wide")
@@ -126,6 +126,25 @@ elif page == "Validation Dashboard":
     if not df.empty:
         st.subheader("All Annotations")
         st.table(df)
+
+        st.subheader("Correct Metadata")
+        st.caption("Fix a label, confidence score, or note on a flagged entry.")
+        row_options = [f"{row['filename']} — {row['timestamp']}" for _, row in df.iterrows()]
+        selected = st.selectbox("Select entry to correct", row_options)
+        selected_row = df.iloc[row_options.index(selected)]
+
+        with st.form("correct_metadata_form"):
+            new_label = st.text_input("Label", value=selected_row["label"])
+            new_confidence = st.slider("Confidence level (1-10)", 1, 10, int(selected_row["confidence"]))
+            new_notes = st.text_area("Notes", value=selected_row["notes"])
+
+            if st.form_submit_button("Save Correction"):
+                update_annotation_metadata(
+                    filename=selected_row["filename"],
+                    timestamp=selected_row["timestamp"],
+                    updates={"label": new_label, "confidence": new_confidence, "notes": new_notes}
+                )
+                st.success("Metadata corrected. Refresh the page to see the update.")
 
         st.subheader("Quality Checks")
         issues = 0
